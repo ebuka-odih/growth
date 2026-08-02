@@ -1,6 +1,6 @@
-<x-layouts.site title="Work" description="Identity, web, product, motion and campaign work from GrowSphere Solutions.">
+<x-layouts.site title="Work" description="Identity, web development, product, motion and campaign work from GrowSphere Solutions.">
     <x-page-header eyebrow="Selected work" title="Projects that moved brands forward.">
-        A snapshot of identity, web and campaign work across startups, SMEs and personal brands.
+        A snapshot of identity, web development and campaign work across startups, SMEs and personal brands.
     </x-page-header>
 
     <section class="py-20 lg:py-24">

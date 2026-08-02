@@ -36,6 +36,45 @@ if (burger && nav) {
     });
 }
 
+/* Enquiry form: show only the fields the chosen enquiry type needs -------- */
+const enquiryForm = document.querySelector('[data-enquiry-form]');
+
+if (enquiryForm) {
+    const message = enquiryForm.querySelector('#message');
+    let placeholders = {};
+
+    try {
+        placeholders = JSON.parse(enquiryForm.dataset.placeholders || '{}');
+    } catch {
+        placeholders = {};
+    }
+
+    const apply = () => {
+        const selected = enquiryForm.querySelector('input[name="type"]:checked')?.value;
+
+        enquiryForm.querySelectorAll('[data-when]').forEach((block) => {
+            const shown = block.dataset.when.split(' ').includes(selected);
+            block.classList.toggle('hidden', !shown);
+
+            // Disabled fields are not submitted, so a hidden cohort or course
+            // can never be attached to the wrong kind of enquiry.
+            block.querySelectorAll('input, select, textarea').forEach((field) => {
+                field.disabled = !shown;
+            });
+        });
+
+        if (message && placeholders[selected]) {
+            message.placeholder = placeholders[selected];
+        }
+    };
+
+    enquiryForm.querySelectorAll('input[name="type"]').forEach((radio) => {
+        radio.addEventListener('change', apply);
+    });
+
+    apply();
+}
+
 /* Admin off-canvas drawer ------------------------------------------------ */
 const drawer = document.querySelector('[data-drawer]');
 

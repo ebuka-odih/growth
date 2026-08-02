@@ -5,6 +5,40 @@
     $inputClass =
         'w-full rounded-xl border border-deep/15 bg-white px-4 py-3 text-[0.94rem] text-ink transition placeholder:text-muted/50 focus:border-violet focus:outline-none';
     $labelClass = 'block text-[0.72rem] font-semibold uppercase tracking-[0.14em] text-deep';
+
+    $types = [
+        [
+            'value' => 'project',
+            'label' => 'Start a project',
+            'icon' => 'spark',
+            'hint' => 'Branding, web development, product, motion or campaign work for your business.',
+        ],
+        [
+            'value' => 'cohort',
+            'label' => 'Book a cohort',
+            'icon' => 'chart',
+            'hint' => 'Join a three-week community training programme. Cohorts run once every two months.',
+        ],
+        [
+            'value' => 'mentorship',
+            'label' => '1-on-1 mentorship',
+            'icon' => 'user',
+            'hint' => 'A personalised guidance session, one to one.',
+        ],
+        [
+            'value' => 'course',
+            'label' => 'Skill course',
+            'icon' => 'monitor',
+            'hint' => 'Self-paced graphic design, motion design or website design courses.',
+        ],
+    ];
+
+    $placeholders = [
+        'project' => 'Tell us about your business, your goals and your timeline.',
+        'cohort' => 'Tell us a little about yourself and what you want to get out of the cohort.',
+        'mentorship' => 'What do you need guidance on right now?',
+        'course' => 'Tell us your current skill level and what you want to be able to do.',
+    ];
 @endphp
 
 <x-layouts.site title="Contact" description="Tell us about your project, book a cohort, or request one-on-one mentorship.">
@@ -26,51 +60,41 @@
                     </div>
                 @endif
 
-                <form method="POST" action="{{ route('contact.store') }}" class="space-y-6">
+                <form method="POST" action="{{ route('contact.store') }}" data-enquiry-form
+                    data-placeholders='@json($placeholders)' class="space-y-7">
                     @csrf
 
+                    {{-- Enquiry type: drives which fields below are shown --}}
                     <fieldset>
                         <legend class="{{ $labelClass }}">What can we help with?</legend>
-                        <div class="mt-3 grid gap-2.5 sm:grid-cols-2">
-                            @foreach ([['project', 'Start a project', 'Branding, web, product, motion or campaign work'], ['cohort', 'Book a cohort', 'Join a 3-week community training programme'], ['mentorship', '1-on-1 mentorship', 'Personalised guidance sessions'], ['course', 'Skill course', 'Graphic, motion or website design courses']] as [$value, $label, $hint])
+
+                        {{-- One choice per row, each carrying its own explanation --}}
+                        <div class="mt-3 flex flex-col gap-2.5">
+                            @foreach ($types as $option)
                                 <label
-                                    class="flex cursor-pointer gap-3 rounded-xl border border-deep/15 bg-white p-4 transition has-[:checked]:border-violet has-[:checked]:bg-lilac-soft">
-                                    <input type="radio" name="type" value="{{ $value }}"
-                                        @checked($type === $value) class="mt-1 accent-[#9900CC]">
-                                    <span>
-                                        <span class="block text-[0.92rem] font-semibold text-deep-900">{{ $label }}</span>
-                                        <span class="mt-0.5 block text-xs leading-relaxed text-muted">{{ $hint }}</span>
+                                    class="flex cursor-pointer items-start gap-3.5 rounded-xl border-2 border-deep/12 bg-white p-4 transition select-none hover:border-violet/50 has-[:checked]:border-violet has-[:checked]:bg-lilac-soft has-[:focus-visible]:ring-3 has-[:focus-visible]:ring-violet/40">
+                                    <input type="radio" name="type" value="{{ $option['value'] }}" class="peer sr-only"
+                                        @checked($type === $option['value'])>
+                                    <span
+                                        class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-lilac text-deep transition peer-checked:bg-violet peer-checked:text-white">
+                                        <x-service-icon :name="$option['icon']" class="h-4.5 w-4.5" />
+                                    </span>
+                                    <span class="min-w-0">
+                                        <span class="block text-[0.96rem] font-semibold text-deep-900">
+                                            {{ $option['label'] }}
+                                        </span>
+                                        <span class="mt-0.5 block text-[0.86rem] leading-relaxed text-muted">
+                                            {{ $option['hint'] }}
+                                        </span>
                                     </span>
                                 </label>
                             @endforeach
                         </div>
                     </fieldset>
 
-                    <div class="grid gap-5 sm:grid-cols-2">
-                        <div>
-                            <label for="name" class="{{ $labelClass }}">Name *</label>
-                            <input id="name" type="text" name="name" value="{{ old('name') }}" required
-                                class="mt-2 {{ $inputClass }}" placeholder="Your full name">
-                        </div>
-                        <div>
-                            <label for="email" class="{{ $labelClass }}">Email *</label>
-                            <input id="email" type="email" name="email" value="{{ old('email') }}" required
-                                class="mt-2 {{ $inputClass }}" placeholder="you@email.com">
-                        </div>
-                        <div>
-                            <label for="phone" class="{{ $labelClass }}">Phone / WhatsApp</label>
-                            <input id="phone" type="text" name="phone" value="{{ old('phone') }}"
-                                class="mt-2 {{ $inputClass }}" placeholder="Optional">
-                        </div>
-                        <div>
-                            <label for="company" class="{{ $labelClass }}">Company / brand</label>
-                            <input id="company" type="text" name="company" value="{{ old('company') }}"
-                                class="mt-2 {{ $inputClass }}" placeholder="Optional">
-                        </div>
-                    </div>
-
+                    {{-- Which cohort / which course: only for the matching choice --}}
                     @if ($cohorts->isNotEmpty())
-                        <div>
+                        <div data-when="cohort" class="{{ $type === 'cohort' ? '' : 'hidden' }}">
                             <label for="cohort_id" class="{{ $labelClass }}">Which cohort?</label>
                             <select id="cohort_id" name="cohort_id" class="mt-2 {{ $inputClass }}">
                                 <option value="">No preference / next available</option>
@@ -82,12 +106,11 @@
                                     </option>
                                 @endforeach
                             </select>
-                            <p class="mt-2 text-xs text-muted">Only applied when "Book a cohort" is selected.</p>
                         </div>
                     @endif
 
                     @if ($courses->isNotEmpty())
-                        <div>
+                        <div data-when="course" class="{{ $type === 'course' ? '' : 'hidden' }}">
                             <label for="course_id" class="{{ $labelClass }}">Which course?</label>
                             <select id="course_id" name="course_id" class="mt-2 {{ $inputClass }}">
                                 <option value="">No preference</option>
@@ -98,11 +121,36 @@
                                     </option>
                                 @endforeach
                             </select>
-                            <p class="mt-2 text-xs text-muted">Only applied when "Skill course" is selected.</p>
                         </div>
                     @endif
 
-                    <div>
+                    {{-- Details --}}
+                    <div class="grid gap-5 sm:grid-cols-2">
+                        <div>
+                            <label for="name" class="{{ $labelClass }}">Name *</label>
+                            <input id="name" type="text" name="name" value="{{ old('name') }}" required
+                                autocomplete="name" class="mt-2 {{ $inputClass }}" placeholder="Your full name">
+                        </div>
+                        <div>
+                            <label for="email" class="{{ $labelClass }}">Email *</label>
+                            <input id="email" type="email" name="email" value="{{ old('email') }}" required
+                                autocomplete="email" class="mt-2 {{ $inputClass }}" placeholder="you@email.com">
+                        </div>
+                        <div>
+                            <label for="phone" class="{{ $labelClass }}">Phone / WhatsApp</label>
+                            <input id="phone" type="text" name="phone" value="{{ old('phone') }}"
+                                autocomplete="tel" class="mt-2 {{ $inputClass }}" placeholder="Optional">
+                        </div>
+
+                        {{-- Company is a business question, so only for project enquiries --}}
+                        <div data-when="project" class="{{ $type === 'project' ? '' : 'hidden' }}">
+                            <label for="company" class="{{ $labelClass }}">Company / brand</label>
+                            <input id="company" type="text" name="company" value="{{ old('company') }}"
+                                autocomplete="organization" class="mt-2 {{ $inputClass }}" placeholder="Optional">
+                        </div>
+                    </div>
+
+                    <div data-when="project" class="{{ $type === 'project' ? '' : 'hidden' }}">
                         <label for="subject" class="{{ $labelClass }}">Subject</label>
                         <input id="subject" type="text" name="subject"
                             value="{{ old('subject', request('subject')) }}" class="mt-2 {{ $inputClass }}"
@@ -112,7 +160,7 @@
                     <div>
                         <label for="message" class="{{ $labelClass }}">Message *</label>
                         <textarea id="message" name="message" rows="6" required class="mt-2 {{ $inputClass }}"
-                            placeholder="Tell us about your business, your goals and your timeline.">{{ old('message') }}</textarea>
+                            placeholder="{{ $placeholders[$type] ?? $placeholders['project'] }}">{{ old('message') }}</textarea>
                     </div>
 
                     {{-- Honeypot --}}
@@ -132,7 +180,7 @@
                         @if (Setting::get('contact_email'))
                             <li>
                                 <span class="block text-xs text-lilac/60">Email</span>
-                                <a href="mailto:{{ Setting::get('contact_email') }}" class="hover:text-violet">
+                                <a href="mailto:{{ Setting::get('contact_email') }}" class="break-words hover:text-violet">
                                     {{ Setting::get('contact_email') }}
                                 </a>
                             </li>

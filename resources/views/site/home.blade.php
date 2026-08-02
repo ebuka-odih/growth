@@ -23,7 +23,7 @@
 
     $process = [
         ['Discover', 'We learn your business, audience and goals through a strategic consultation.'],
-        ['Design', 'Identity, web, product or campaign creative — crafted to position you strongly.'],
+        ['Design', 'Identity, web development, product or campaign creative — crafted to position you strongly.'],
         ['Launch', 'We ship across channels: web, social, print, motion and ads.'],
         ['Grow', 'Performance tracking, optimisation and ongoing growth strategy.'],
     ];
@@ -127,7 +127,7 @@
         <div class="relative mx-auto max-w-6xl px-6">
             <div class="flex flex-wrap items-end justify-between gap-6">
                 <x-section-head eyebrow="Selected work" title="Projects that moved brands forward." tone="light">
-                    A snapshot of identity, web and campaign work.
+                    A snapshot of identity, web development and campaign work.
                 </x-section-head>
                 <x-button variant="outline-light" :href="route('work.index')" class="reveal">View all work</x-button>
             </div>
