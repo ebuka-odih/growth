@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AccountController;
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\BookingController as AdminBookingController;
 use App\Http\Controllers\Admin\CohortController as AdminCohortController;
@@ -76,6 +77,12 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
         Route::get('settings', [AdminSettingController::class, 'edit'])->name('settings.edit');
         Route::put('settings', [AdminSettingController::class, 'update'])->name('settings.update');
+
+        Route::get('account', [AccountController::class, 'edit'])->name('account.edit');
+        Route::put('account/profile', [AccountController::class, 'updateProfile'])->name('account.profile');
+        Route::put('account/password', [AccountController::class, 'updatePassword'])
+            ->middleware('throttle:6,1')
+            ->name('account.password');
     });
 });
 

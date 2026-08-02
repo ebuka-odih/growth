@@ -6,6 +6,25 @@
         <x-button variant="accent" :href="route('admin.projects.create')" class="!px-5 !py-2.5">New project</x-button>
     </x-slot:actions>
 
+    @if (\App\Http\Controllers\Admin\AccountController::usesSeededPassword())
+        <a href="{{ route('admin.account.edit') }}"
+            class="mb-6 flex items-start gap-3 rounded-2xl border border-amber-300 bg-amber-50 p-5 transition hover:border-amber-400">
+            <span class="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-amber-400 text-white">
+                <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
+                    stroke-linecap="round">
+                    <path d="M12 8v5M12 17h.01" />
+                </svg>
+            </span>
+            <span>
+                <span class="block text-sm font-semibold text-amber-900">Change your admin password</span>
+                <span class="mt-1 block text-sm text-amber-800">
+                    This account still uses the password the site shipped with, which is the same for every copy of this
+                    project. Change it &rarr;
+                </span>
+            </span>
+        </a>
+    @endif
+
     <div class="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
         @foreach ($stats as $stat)
             <a href="{{ $stat['route'] }}"

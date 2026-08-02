@@ -10,11 +10,13 @@
     'placeholder' => null,
     'step' => null,
     'slugSource' => null,
+    'autocomplete' => null,
 ])
 
 @php
     $id = 'field-'.str_replace(['[', ']', '.'], ['-', '', '-'], $name);
-    $current = old($name, $value);
+    // Never echo a password back into the markup.
+    $current = $type === 'password' ? null : old($name, $value);
     $base =
         'w-full rounded-lg border border-deep/15 bg-white px-3.5 py-2.5 text-[0.92rem] text-ink transition placeholder:text-muted/45 focus:border-violet focus:outline-none';
     $invalid = $errors->has($name) ? ' border-red-400' : '';
@@ -42,6 +44,7 @@
         <input id="{{ $id }}" type="{{ $type }}" name="{{ $name }}"
             value="{{ $type === 'date' && $current instanceof \DateTimeInterface ? $current->format('Y-m-d') : $current }}"
             @if ($required) required @endif @if ($step) step="{{ $step }}" @endif
+            @if ($autocomplete) autocomplete="{{ $autocomplete }}" @endif
             placeholder="{{ $placeholder }}" @if ($slugSource) data-slug-source="{{ $slugSource }}" @endif
             class="mt-2 {{ $base }}{{ $invalid }}">
     @endif

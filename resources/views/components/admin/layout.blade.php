@@ -21,6 +21,7 @@
         ]],
         ['group' => 'Configuration', 'items' => [
             ['label' => 'Site settings', 'route' => 'admin.settings.edit', 'match' => 'admin.settings.*', 'icon' => 'sphere'],
+            ['label' => 'Account & security', 'route' => 'admin.account.edit', 'match' => 'admin.account.*', 'icon' => 'user'],
         ]],
     ];
 @endphp
