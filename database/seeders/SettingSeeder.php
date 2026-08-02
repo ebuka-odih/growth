@@ -38,6 +38,7 @@ class SettingSeeder extends Seeder
             'substack_blurb' => 'Growth notes, cohort announcements and practical playbooks — straight from the GrowSphere Community.',
 
             'social_whatsapp' => 'https://wa.me/2348146872417',
+            'social_whatsapp_community' => 'https://chat.whatsapp.com/KORoXIUtRofH8HONLFZzl9',
             'social_instagram' => 'https://www.instagram.com/growsphere_officiall',
             'social_linkedin' => 'https://www.linkedin.com/company/growsphere-community/',
             'social_x' => 'https://x.com/growsphere0',

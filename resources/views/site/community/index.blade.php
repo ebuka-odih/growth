@@ -8,6 +8,12 @@
 
         <x-slot:actions>
             <x-button variant="light" :href="route('contact', ['type' => 'cohort'])">Book a cohort</x-button>
+            @if (Setting::get('social_whatsapp_community'))
+                <x-button variant="outline-light" :href="Setting::get('social_whatsapp_community')" target="_blank"
+                    rel="noopener">
+                    Join the WhatsApp community
+                </x-button>
+            @endif
             <x-button variant="outline-light" :href="route('contact', ['type' => 'mentorship'])">Book 1-on-1 mentorship</x-button>
         </x-slot:actions>
     </x-page-header>
@@ -143,6 +149,24 @@
                     <x-button variant="accent" :href="route('contact', ['type' => 'cohort'])">Book a cohort</x-button>
                     <x-button variant="ghost" :href="route('contact', ['type' => 'mentorship'])">Book mentorship</x-button>
                 </div>
+
+                @if (Setting::get('social_whatsapp_community'))
+                    <a href="{{ Setting::get('social_whatsapp_community') }}" target="_blank" rel="noopener"
+                        class="mt-5 flex items-start gap-4 rounded-[var(--radius-brand)] border-2 border-deep/12 bg-white p-5 transition hover:-translate-y-0.5 hover:border-violet hover:shadow-[0_18px_36px_rgba(51,0,102,0.1)]">
+                        <span class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[#25D366] text-white">
+                            <svg class="h-6 w-6" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                                <path
+                                    d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91S17.5 2 12.04 2Zm5.8 14.16c-.24.68-1.4 1.3-1.95 1.34-.5.04-.97.22-3.27-.68-2.76-1.09-4.5-3.9-4.64-4.08-.13-.18-1.1-1.46-1.1-2.79s.7-1.98.95-2.25c.25-.27.54-.34.72-.34.18 0 .36 0 .52.01.17.01.39-.06.61.47.23.54.77 1.87.84 2.01.07.13.11.29.02.47-.09.18-.13.29-.26.45-.13.16-.28.35-.4.47-.13.13-.27.28-.12.55.16.27.7 1.15 1.5 1.86 1.03.92 1.9 1.2 2.17 1.34.27.13.42.11.58-.07.16-.18.67-.78.85-1.05.18-.27.36-.22.6-.13.25.09 1.57.74 1.84.87.27.13.45.2.52.31.07.11.07.65-.17 1.33Z" />
+                            </svg>
+                        </span>
+                        <span>
+                            <span class="block text-[0.96rem] font-semibold text-deep-900">Join the WhatsApp community</span>
+                            <span class="mt-0.5 block text-[0.88rem] leading-relaxed text-muted">
+                                Where members talk between cohorts — questions, wins and announcements.
+                            </span>
+                        </span>
+                    </a>
+                @endif
             </div>
 
             <div class="space-y-5">

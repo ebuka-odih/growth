@@ -50,7 +50,8 @@ class SettingController extends Controller
             'contact_location' => ['label' => 'Location line', 'type' => 'text'],
         ],
         'Social links' => [
-            'social_whatsapp' => ['label' => 'WhatsApp', 'type' => 'url'],
+            'social_whatsapp' => ['label' => 'WhatsApp (direct chat)', 'type' => 'url', 'help' => 'A wa.me link to your number.'],
+            'social_whatsapp_community' => ['label' => 'WhatsApp community invite', 'type' => 'url', 'help' => 'The chat.whatsapp.com group invite. Shown as a join button on the Community page.'],
             'social_instagram' => ['label' => 'Instagram', 'type' => 'url'],
             'social_linkedin' => ['label' => 'LinkedIn', 'type' => 'url'],
             'social_x' => ['label' => 'X (Twitter)', 'type' => 'url'],

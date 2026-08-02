@@ -20,6 +20,7 @@
     ];
 
     $socials = array_filter([
+        'WhatsApp Community' => $settings['social_whatsapp_community'] ?? null,
         'WhatsApp' => $settings['social_whatsapp'] ?? null,
         'Instagram' => $settings['social_instagram'] ?? null,
         'LinkedIn' => $settings['social_linkedin'] ?? null,
