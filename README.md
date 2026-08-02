@@ -1,101 +1,97 @@
 # GrowSphere Solutions
 
-Public website + admin panel for **GrowSphere Solutions Limited** — a branding, marketing, technology and
-creative media company, and the **GrowSphere Community**, its cohort-based training arm.
+The website for **GrowSphere Solutions Limited** — a branding, marketing, technology and creative
+media company — and for the **GrowSphere Community**, its training and mentorship arm.
 
-Laravel 12 · Blade · Tailwind CSS 4 (Vite) · SQLite.
-Served by Herd at **http://growth.test**.
+GrowSphere is more than an agency. It is a growth ecosystem: one side builds brands for businesses,
+the other builds skills and financial confidence in individuals.
+
+---
+
+## What the company does
+
+**Our mission** — to empower businesses and individuals with innovative branding, consulting and
+digital solutions that drive growth, visibility, profitability and long-term success.
+
+**Our vision** — to become Africa's leading growth and business solutions company.
+
+**Core values** — Innovation · Professionalism · Excellence · Integrity · Creativity · Growth
+
+### Services
+
+Eight service lines, offered to individuals, entrepreneurs, startups, SMEs and organisations:
+
+- Brand Identity Creation — logos, colour palettes, typography, style guides, messaging
+- Graphic Design — social media graphics, flyers, brochures, posters, event and print materials
+- Website Design & Development — business websites, maintenance, optimisation
+- Product Design (UI/UX) — mobile and web app design, design systems, user research
+- Motion Graphics & Explainers — animated brand content, explainer and showcase videos
+- Advertisement Creation — social ads, digital campaigns, outdoor and print, launch campaigns
+- Marketing Strategy & Campaigns — strategy, targeting, lead generation, performance tracking
+- Consultancy — strategic branding consultation and business growth strategy
+
+### The GrowSphere Community
+
+A community designed to empower individuals on their journey toward personal and financial growth.
+
+- **Cohort programmes** — three-week trainings that run once every two months, each ending in a
+  certificate: *1.0 Personal Development*, *2.0 Wealth Creation*, *3.0 Selling Like a Pro*
+- **Skill courses** — self-paced graphic design, motion design and website design, with tutorials,
+  downloadable resources and advanced tiers
+- **Group trainings** — scheduled sessions on rotating topics
+- **One-on-one mentorship** — personalised guidance for people who need direct support
+
+---
+
+## The site
+
+| Page | What's on it |
+| --- | --- |
+| Home | Hero, services, selected work, cohorts, process, testimonials, latest insights |
+| Services | All eight service lines, each with its own page and deliverables |
+| Work | Project portfolio, filterable by category, with case-study pages |
+| Community | Cohorts, skill courses, membership benefits, mentorship |
+| Insights | Articles and announcements, published alongside the Substack newsletter |
+| About | The brand story, the name, the founder, core values |
+| Contact | One form for project briefs, cohort bookings, course enrolments and mentorship requests |
+
+Enquiries from the contact form arrive in the site's admin area, where they can be tracked from
+new → contacted → closed.
+
+The **GrowSphere Community Substack** is embedded on the home, community, insights, cohort and
+contact pages, so visitors can subscribe without leaving the site.
 
 ---
 
 ## Brand
 
-Taken from `assets/GrowSphere Brand Document.pdf` — not from `resources/design/grow.reference.html`,
-which was an early mock using a different (unofficial) violet/amber palette.
+The site follows the GrowSphere Brand Document.
 
-| Token | Value | Use |
-| --- | --- | --- |
-| `--color-deep` | `#330066` | Primary. Buttons, headings, dark surfaces. |
-| `--color-deep-900` | `#1A0033` | Deepest surfaces, footer, dark sections. |
-| `--color-violet` | `#9900CC` | Accent. Links, active states, the spiral mark. |
-| `--color-lilac` | `#EDE4F7` | Soft fills, icon chips. |
-| `--color-paper` | `#FBFAFD` | Page background. |
+| | |
+| --- | --- |
+| Deep purple | `#330066` |
+| Bright purple | `#9900CC` |
+| Display type | Inter |
+| Body type | Jost (standing in for Futura Md BT) |
 
-Typography: **Inter** (900 for display, per "Inter Display Black") and **Jost** for body text —
-Jost is the web stand-in for the brand's Futura Md BT.
-
-The concentric-arc **brand pattern** from the brand document is reproduced as a tiling SVG background
-(`.brand-pattern`, `.brand-pattern-ink` in `resources/css/app.css`). The spiral **mark** is an inline SVG
-component (`<x-mark />`) so it stays crisp at any size; raster logo files live in `public/images/brand/`.
+The name is carved from **GROW** — progress, learning and transformation — and **SPHERE** — a
+perfectly symmetrical shape representing balance and unity. The spiral mark connotes growing within
+your own sphere, and reappears across the site as a repeating background pattern and as the orbit on
+the home page, where the services circle a brand at the centre.
 
 ---
 
-## Business model in the code
+## Managing the site
 
-From `assets/GrowSphere Solutions Limited (1).pdf` and `assets/Growsphere Community Business Strategy (1).pdf`:
+Everything that changes is editable from the admin area at `/admin` — no code required:
 
-- **Agency side** — 8 service lines (`services`), a portfolio (`projects`), enquiries (`bookings`).
-- **Community side** — 3-week cohort programmes run every 2 months (`cohorts`), self-paced skill
-  courses with advanced tiers (`courses`), one-on-one mentorship (a `bookings` type), certificates.
-- **Content** — insights/announcements (`posts`), quotes (`testimonials`), newsletter signups
-  (`subscribers`), plus the Substack embed.
-
----
-
-## Admin
-
-**http://growth.test/admin** — seeded login:
-
-```
-growspheresolutions2@gmail.com / growsphere
-```
-
-> Change this password before the site goes anywhere public.
-
-Everything dynamic on the site is editable there: services, work, cohorts, courses, insights,
-testimonials, the enquiry inbox, subscribers (with CSV export), and **Site settings** — hero copy,
-stats, mission/vision, founder bio, contact details, social links and the Substack URLs.
-
-Clearing `substack_embed_url` in Site settings removes every Substack embed across the site.
+- Services, portfolio projects and testimonials
+- Cohorts (status, dates, curriculum, fees) and skill courses
+- Insights posts, with drafts and scheduled publish dates
+- The enquiry inbox and newsletter subscriber list
+- Site settings — hero copy, headline statistics, mission and vision, founder bio, contact details,
+  social links and the Substack address
 
 ---
 
-## Substack
-
-`https://growspherecommunity.substack.com/embed` is rendered by the `<x-substack-embed />` component,
-which is placed on **Home**, **Community**, **Insights**, **each post**, **each cohort** and **Contact**,
-and linked from the footer. The iframe is forced to `width: 100%` so it stays responsive
-(`.substack-frame iframe`). Both URLs are admin-editable.
-
-Publishing a post here does **not** push it to Substack — the two are independent.
-
----
-
-## Local development
-
-```bash
-composer install && npm install && npm run build
-```
-
-Rebuild assets after changing Blade or CSS (Tailwind scans the Blade files):
-
-```bash
-npm run build
-```
-
-Reset the database to seeded demo content:
-
-```bash
-php artisan migrate:fresh --seed
-```
-
----
-
-## Notes
-
-- Uploads go to `storage/app/public` and are served through the `public/storage` symlink.
-- Contact and subscribe endpoints are rate-limited and use a honeypot field.
-- `.reveal` scroll animations are scoped to `.js`, so content stays visible if JavaScript fails.
-- Motion respects `prefers-reduced-motion`.
-- `assets/` holds the original source PDFs and logo files; `resources/design/grow.reference.html` is
-  the original static mock, kept for reference only — it is not served.
+© GrowSphere Solutions Limited. All rights reserved.

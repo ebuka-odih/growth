@@ -1,0 +1,310 @@
+@import 'tailwindcss';
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+@source '../**/*.blade.php';
+@source '../**/*.js';
+
+/*
+| GrowSphere design tokens
+| Palette and typography per the GrowSphere Brand Document:
+|   #330066  deep purple   (primary)
+|   #9900CC  bright purple (accent)
+|   Inter Display Black + Futura Md BT (Jost is the web stand-in for Futura)
+*/
+@theme {
+    --font-sans: 'Jost', ui-sans-serif, system-ui, sans-serif;
+    --font-display: 'Inter', ui-sans-serif, system-ui, sans-serif;
+
+    --color-deep: #330066;
+    --color-deep-700: #2a0055;
+    --color-deep-900: #1a0033;
+    --color-violet: #9900cc;
+    --color-violet-600: #8500b3;
+    --color-lilac: #ede4f7;
+    --color-lilac-soft: #f6f1fb;
+    --color-paper: #fbfafd;
+    --color-ink: #16091f;
+    --color-muted: #5c5170;
+
+    --radius-brand: 20px;
+}
+
+@layer base {
+    html {
+        scroll-behavior: smooth;
+    }
+
+    body {
+        background-color: var(--color-paper);
+        color: var(--color-ink);
+        -webkit-font-smoothing: antialiased;
+    }
+
+    h1,
+    h2,
+    h3,
+    .font-display {
+        font-family: var(--font-display);
+        font-weight: 900;
+        letter-spacing: -0.025em;
+        line-height: 1.1;
+    }
+
+    :focus-visible {
+        outline: 3px solid var(--color-violet);
+        outline-offset: 3px;
+        border-radius: 4px;
+    }
+}
+
+@layer components {
+    /* Concentric-arc brand pattern from the brand document, as a tileable background. */
+    .brand-pattern {
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cg fill='none' stroke='%23ffffff' stroke-width='2.5' opacity='0.09'%3E%3Cpath d='M60 24a36 36 0 1 1-36 36'/%3E%3Cpath d='M60 36a24 24 0 1 1-24 24'/%3E%3Cpath d='M60 48a12 12 0 1 1-12 12'/%3E%3C/g%3E%3C/svg%3E");
+        background-size: 120px 120px;
+    }
+
+    .brand-pattern-ink {
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cg fill='none' stroke='%23330066' stroke-width='2.5' opacity='0.07'%3E%3Cpath d='M60 24a36 36 0 1 1-36 36'/%3E%3Cpath d='M60 36a24 24 0 1 1-24 24'/%3E%3Cpath d='M60 48a12 12 0 1 1-12 12'/%3E%3C/g%3E%3C/svg%3E");
+        background-size: 120px 120px;
+    }
+
+    /* Scoped to .js so content stays visible if JavaScript never runs. */
+    .js .reveal {
+        opacity: 0;
+        transform: translateY(24px);
+        transition:
+            opacity 0.7s ease,
+            transform 0.7s ease;
+    }
+
+    .reveal.is-in {
+        opacity: 1;
+        transform: none;
+    }
+
+    .prose-brand {
+        font-size: 1.0625rem;
+        line-height: 1.8;
+        color: #3a3049;
+    }
+
+    .prose-brand p + p {
+        margin-top: 1.35em;
+    }
+
+    .prose-brand h2,
+    .prose-brand h3 {
+        color: var(--color-deep);
+        margin-top: 2em;
+        margin-bottom: 0.6em;
+    }
+
+    .prose-brand ul {
+        list-style: disc;
+        padding-left: 1.3em;
+        margin: 1.2em 0;
+    }
+
+    .prose-brand a {
+        color: var(--color-violet);
+        text-decoration: underline;
+        text-underline-offset: 3px;
+    }
+
+    /*
+    | Admin data tables
+    | Below md each row becomes a self-contained card: the header row is dropped and every
+    | cell carries its own label, so nothing depends on horizontal scrolling.
+    */
+    @media (max-width: 767px) {
+        .admin-table thead {
+            display: none;
+        }
+
+        .admin-table,
+        .admin-table tbody {
+            display: block;
+            min-width: 0;
+        }
+
+        .admin-table tr {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 0.75rem;
+            overflow: hidden;
+            border: 1px solid rgba(51, 0, 102, 0.1);
+            border-radius: 16px;
+            background: #fff;
+        }
+
+        .admin-table td {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            border-top: 1px solid rgba(51, 0, 102, 0.07);
+            padding: 0.7rem 1rem;
+            text-align: right;
+        }
+
+        .admin-table td::before {
+            content: attr(data-label);
+            flex: none;
+            font-size: 0.62rem;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--color-deep);
+            opacity: 0.55;
+            text-align: left;
+        }
+
+        /* The name/title cell becomes the card header. */
+        .admin-table td[data-card-title] {
+            order: -1;
+            display: block;
+            border-top: 0;
+            background: rgba(237, 228, 247, 0.5);
+            padding: 0.9rem 1rem;
+            text-align: left;
+        }
+
+        .admin-table td[data-card-title]::before {
+            display: none;
+        }
+
+        .admin-table td:not([data-card-title]) > * {
+            text-align: right;
+        }
+    }
+
+    /* Substack renders its embed in an iframe we cannot style; give it a branded frame. */
+    .substack-frame iframe {
+        width: 100%;
+        max-width: 100%;
+        border: 0;
+        border-radius: 14px;
+        background: #fff;
+        display: block;
+    }
+}
+
+@keyframes gs-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes gs-spin-reverse {
+    to {
+        transform: rotate(-360deg);
+    }
+}
+
+@keyframes gs-pulse {
+    0%,
+    100% {
+        transform: scale(1);
+        opacity: 0.5;
+    }
+    50% {
+        transform: scale(1.14);
+        opacity: 0.12;
+    }
+}
+
+.animate-spin-slow {
+    animation: gs-spin 44s linear infinite;
+}
+
+.animate-spin-slower {
+    animation: gs-spin 68s linear infinite reverse;
+}
+
+/*
+| Orbit
+| One shared duration drives the ring and a counter-rotation on each label, so the
+| satellites travel around the sphere while their text stays upright.
+*/
+.orbit {
+    --orbit-duration: 46s;
+}
+
+.orbit-track {
+    position: absolute;
+    inset: 14%;
+    pointer-events: none;
+    animation: gs-spin var(--orbit-duration) linear infinite;
+}
+
+.orbit-node {
+    position: absolute;
+    inset: 0;
+    transform: rotate(var(--orbit-angle, 0deg));
+}
+
+.orbit-anchor,
+.orbit-counter,
+.orbit-upright {
+    position: absolute;
+    height: 0;
+    width: 0;
+}
+
+/* Ride the top of the node, which the node's own rotation places on the ring. */
+.orbit-anchor {
+    top: 0;
+    left: 50%;
+}
+
+.orbit-counter {
+    top: 0;
+    left: 0;
+    animation: gs-spin-reverse var(--orbit-duration) linear infinite;
+}
+
+.orbit-upright {
+    top: 0;
+    left: 0;
+    transform: rotate(calc(-1 * var(--orbit-angle, 0deg)));
+}
+
+.orbit-pill {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    white-space: nowrap;
+}
+
+.orbit-pulse {
+    animation: gs-pulse 6s ease-in-out infinite;
+}
+
+@media (max-width: 640px) {
+    .orbit-track {
+        inset: 22%;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .js .reveal {
+        opacity: 1;
+        transform: none;
+        transition: none;
+    }
+
+    .animate-spin-slow,
+    .animate-spin-slower,
+    .orbit-track,
+    .orbit-counter,
+    .orbit-pulse {
+        animation: none !important;
+    }
+
+    html {
+        scroll-behavior: auto;
+    }
+}
