@@ -219,7 +219,7 @@
                     <h3 class="mt-4 text-xl text-deep-900">One community, every path to growth.</h3>
 
                     <ul class="mt-6 space-y-3.5">
-                        @foreach (['Cohort-based programs every 2 months', 'Premium skill courses with resources', 'One-on-one mentorship sessions', 'Certificates for every completed program', 'Upsells to advanced programs'] as $benefit)
+                        @foreach (['Cohort-based programs every 3 months', 'Premium skill courses with resources', 'One-on-one mentorship sessions', 'Certificates for every completed program', 'Upsells to advanced programs'] as $benefit)
                             <li class="flex items-start gap-3 text-[0.92rem] text-ink">
                                 <span
                                     class="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-violet text-white">

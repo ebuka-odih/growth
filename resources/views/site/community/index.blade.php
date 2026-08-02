@@ -134,7 +134,7 @@
                 </p>
 
                 <ul class="mt-8 space-y-3.5">
-                    @foreach (['Cohort-based programs every 2 months', 'Premium skill courses with tutorials and resources', 'Scheduled group training sessions', 'One-on-one mentorship for direct guidance', 'Certificates for every completed program', 'Upsells to advanced programs and resources'] as $benefit)
+                    @foreach (['Cohort-based programs every 3 months', 'Premium skill courses with tutorials and resources', 'Scheduled group training sessions', 'One-on-one mentorship for direct guidance', 'Certificates for every completed program', 'Upsells to advanced programs and resources'] as $benefit)
                         <li class="flex items-start gap-3 text-[0.95rem] text-ink">
                             <span
                                 class="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-violet text-white">
@@ -218,5 +218,5 @@
     @endif
 
     <x-cta title="Wait for a cohort, or get one-on-one mentorship."
-        body="Cohorts run once every two months. If you need direct guidance sooner, book a personalised mentorship session." />
+        body="Cohorts run once every three months. If you need direct guidance sooner, book a personalised mentorship session." />
 </x-layouts.site>

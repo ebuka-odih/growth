@@ -45,9 +45,12 @@
     {{-- Founder --------------------------------------------------------------- --}}
     <section class="py-20 lg:py-24">
         <div class="mx-auto grid max-w-6xl items-center gap-14 px-6 lg:grid-cols-[0.85fr_1.15fr]">
-            <div class="reveal overflow-hidden rounded-[var(--radius-brand)]">
-                <img src="{{ asset('images/brand/mockup-2.jpg') }}" alt="GrowSphere brand in application"
-                    class="h-full w-full object-cover" loading="lazy">
+            <div class="reveal relative mx-auto w-full max-w-sm lg:mx-0">
+                <div class="absolute -top-4 -left-4 h-24 w-24 rounded-full border-2 border-violet/25"></div>
+                <img src="{{ asset('images/helen.png') }}"
+                    alt="{{ Setting::get('founder_name') }}, {{ Setting::get('founder_role') }}"
+                    class="relative aspect-4/5 w-full rounded-[var(--radius-brand)] object-cover object-top shadow-[0_24px_60px_rgba(51,0,102,0.18)]"
+                    width="1122" height="1402" loading="lazy">
             </div>
 
             <div class="reveal">

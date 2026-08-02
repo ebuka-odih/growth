@@ -34,7 +34,7 @@ Eight service lines, offered to individuals, entrepreneurs, startups, SMEs and o
 
 A community designed to empower individuals on their journey toward personal and financial growth.
 
-- **Cohort programmes** — three-week trainings that run once every two months, each ending in a
+- **Cohort programmes** — three-week trainings that run once every three months, each ending in a
   certificate: *1.0 Personal Development*, *2.0 Wealth Creation*, *3.0 Selling Like a Pro*
 - **Skill courses** — self-paced graphic design, motion design and website design, with tutorials,
   downloadable resources and advanced tiers

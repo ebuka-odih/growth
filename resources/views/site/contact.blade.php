@@ -17,7 +17,7 @@
             'value' => 'cohort',
             'label' => 'Book a cohort',
             'icon' => 'chart',
-            'hint' => 'Join a three-week community training programme. Cohorts run once every two months.',
+            'hint' => 'Join a three-week community training programme. Cohorts run once every three months.',
         ],
         [
             'value' => 'mentorship',

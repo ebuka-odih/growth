@@ -16,7 +16,7 @@ class PostSeeder extends Seeder
                 'category' => 'Announcement',
                 'author' => 'GrowSphere Community',
                 'excerpt' => 'Our foundation cohort opens again. Three weeks, a certificate, and a room of people building the same habits you are.',
-                'body' => "Cohort 1.0 is the entry point to the GrowSphere Community. Over three weeks we work through the mindset and habits behind sustainable growth — self-awareness, goal setting, discipline systems and personal presence.\n\nEvery participant who completes the programme receives a certificate. Cohorts run once every two months, so if you miss this one the next intake is roughly eight weeks away.\n\nBook your place from the Community page, or join the waitlist for the next intake.",
+                'body' => "Cohort 1.0 is the entry point to the GrowSphere Community. Over three weeks we work through the mindset and habits behind sustainable growth — self-awareness, goal setting, discipline systems and personal presence.\n\nEvery participant who completes the programme receives a certificate. Cohorts run once every three months, so if you miss this one the next intake is roughly twelve weeks away.\n\nBook your place from the Community page, or join the waitlist for the next intake.",
             ],
             [
                 'title' => 'Why your brand needs a system, not just a logo',

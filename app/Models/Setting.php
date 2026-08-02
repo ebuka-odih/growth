@@ -52,7 +52,7 @@ class Setting extends Model
         'social_x' => 'https://x.com/growsphere0',
         'social_youtube' => '',
 
-        'cohort_cadence' => 'Cohorts run once every 2 months.',
+        'cohort_cadence' => 'Cohorts run once every 3 months.',
     ];
 
     protected $guarded = [];

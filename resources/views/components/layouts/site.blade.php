@@ -20,14 +20,15 @@
         ['label' => 'About', 'route' => 'about', 'active' => 'about'],
     ];
 
-    $socials = array_filter([
-        'WhatsApp Community' => $settings['social_whatsapp_community'] ?? null,
-        'WhatsApp' => $settings['social_whatsapp'] ?? null,
-        'Instagram' => $settings['social_instagram'] ?? null,
-        'LinkedIn' => $settings['social_linkedin'] ?? null,
-        'X (Twitter)' => $settings['social_x'] ?? null,
-        'YouTube' => $settings['social_youtube'] ?? null,
-    ]);
+    // Icon-only links, so each needs an accessible name of its own.
+    $socials = collect([
+        ['icon' => 'whatsapp', 'label' => 'WhatsApp community', 'url' => $settings['social_whatsapp_community'] ?? null],
+        ['icon' => 'instagram', 'label' => 'Instagram', 'url' => $settings['social_instagram'] ?? null],
+        ['icon' => 'linkedin', 'label' => 'LinkedIn', 'url' => $settings['social_linkedin'] ?? null],
+        ['icon' => 'x', 'label' => 'X (Twitter)', 'url' => $settings['social_x'] ?? null],
+        ['icon' => 'youtube', 'label' => 'YouTube', 'url' => $settings['social_youtube'] ?? null],
+        ['icon' => 'substack', 'label' => 'Substack', 'url' => $settings['substack_url'] ?? null],
+    ])->filter(fn ($social) => filled($social['url']))->values();
 @endphp
 
 <!DOCTYPE html>
@@ -99,18 +100,30 @@
 
     <footer class="mt-24 bg-deep-900 text-lilac/70">
         <div class="mx-auto max-w-6xl px-6 py-16">
-            <div class="grid gap-10 md:grid-cols-2 lg:grid-cols-[1.5fr_1fr_1fr_1fr]">
+            {{-- Connect is widest so the five social icons sit on one row --}}
+            <div class="grid gap-10 md:grid-cols-2 lg:grid-cols-[1.4fr_0.95fr_0.95fr_1.2fr]">
                 <div>
                     <x-logo tone="light" :href="route('home')" />
                     <p class="mt-5 max-w-xs text-sm leading-relaxed">
                         Branding, marketing, technology and creative media solutions for sustainable growth.
                     </p>
-                    <p class="mt-5 text-sm">
-                        <a href="mailto:{{ $settings['contact_email'] ?? 'growspheresolutions2@gmail.com' }}"
-                            class="font-medium text-white hover:text-violet">
-                            {{ $settings['contact_email'] ?? 'growspheresolutions2@gmail.com' }}
-                        </a>
-                    </p>
+                    <div class="mt-5 space-y-1.5 text-sm">
+                        @if ($settings['contact_email'] ?? null)
+                            <p>
+                                <a href="mailto:{{ $settings['contact_email'] }}"
+                                    class="font-medium text-white hover:text-violet">{{ $settings['contact_email'] }}</a>
+                            </p>
+                        @endif
+                        {{-- The direct number, since the icon row links to the community group --}}
+                        @if ($settings['social_whatsapp'] ?? null)
+                            <p>
+                                <a href="{{ $settings['social_whatsapp'] }}" target="_blank" rel="noopener"
+                                    class="font-medium text-white hover:text-violet">
+                                    WhatsApp {{ $settings['contact_phone'] ?? '' }}
+                                </a>
+                            </p>
+                        @endif
+                    </div>
                 </div>
 
                 <div>
@@ -129,18 +142,22 @@
                         <li><a href="{{ route('community.index') }}#courses" class="hover:text-violet">Skill courses</a></li>
                         <li><a href="{{ route('contact', ['type' => 'mentorship']) }}" class="hover:text-violet">1-on-1 mentorship</a></li>
                         <li><a href="{{ route('insights.index') }}" class="hover:text-violet">Insights</a></li>
-                        @if ($settings['substack_url'] ?? null)
-                            <li><a href="{{ $settings['substack_url'] }}" target="_blank" rel="noopener" class="hover:text-violet">Substack</a></li>
-                        @endif
                     </ul>
                 </div>
 
                 <div>
                     <h4 class="text-sm font-semibold text-white">Connect</h4>
-                    @if ($socials)
-                        <ul class="mt-4 space-y-3 text-sm">
-                            @foreach ($socials as $label => $url)
-                                <li><a href="{{ $url }}" target="_blank" rel="noopener" class="hover:text-violet">{{ $label }}</a></li>
+                    @if ($socials->isNotEmpty())
+                        <ul class="mt-4 flex flex-wrap gap-1.5">
+                            @foreach ($socials as $social)
+                                <li>
+                                    <a href="{{ $social['url'] }}" target="_blank" rel="noopener"
+                                        title="{{ $social['label'] }}"
+                                        class="flex h-10 w-10 items-center justify-center rounded-full border border-white/15 text-lilac/75 transition hover:-translate-y-0.5 hover:border-violet hover:bg-violet hover:text-white">
+                                        <x-social-icon :name="$social['icon']" class="h-[1.05rem] w-[1.05rem]" />
+                                        <span class="sr-only">{{ $social['label'] }}</span>
+                                    </a>
+                                </li>
                             @endforeach
                         </ul>
                     @else
