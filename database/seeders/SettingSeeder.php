@@ -38,9 +38,9 @@ class SettingSeeder extends Seeder
             'substack_blurb' => 'Growth notes, cohort announcements and practical playbooks — straight from the GrowSphere Community.',
 
             'social_whatsapp' => 'https://wa.me/2348146872417',
-            'social_instagram' => '',
-            'social_linkedin' => '',
-            'social_x' => '',
+            'social_instagram' => 'https://www.instagram.com/growsphere_officiall',
+            'social_linkedin' => 'https://www.linkedin.com/company/growsphere-community/',
+            'social_x' => 'https://x.com/growsphere0',
             'social_youtube' => '',
 
             'cohort_cadence' => 'Cohorts run once every 2 months.',
