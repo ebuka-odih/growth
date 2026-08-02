@@ -63,7 +63,9 @@ class SettingController extends Controller
     {
         return view('admin.settings', [
             'groups' => self::GROUPS,
-            'values' => Setting::cached(),
+            // Resolved, so the form shows what the site is actually rendering,
+            // not blanks where a shipped default is in use.
+            'values' => Setting::resolved(),
         ]);
     }
 

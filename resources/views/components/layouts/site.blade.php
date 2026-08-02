@@ -4,7 +4,8 @@
 ])
 
 @php
-    $settings = \App\Models\Setting::cached();
+    // Resolved, so shipped defaults still apply on an install that has never been seeded.
+    $settings = \App\Models\Setting::resolved();
     $metaTitle = $title ? $title . ' — GrowSphere Solutions' : 'GrowSphere Solutions — Branding, Growth & Creative Media';
     $metaDescription =
         $description ?:
