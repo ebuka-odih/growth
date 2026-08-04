@@ -2,18 +2,22 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\HasMedia;
 use App\Models\Concerns\HasSlug;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Storage;
 
 class Course extends Model
 {
-    use HasSlug;
+    use HasMedia, HasSlug;
 
     public const LEVELS = ['Foundation', 'Advanced'];
 
+    public const MEDIA_LIMIT = 3;
+
     protected $guarded = [];
+
+    protected $with = ['media'];
 
     protected $casts = [
         'price' => 'decimal:2',
@@ -33,7 +37,7 @@ class Course extends Model
 
     public function imageUrl(): ?string
     {
-        return $this->image ? Storage::url($this->image) : null;
+        return $this->featuredImageUrl();
     }
 
     /** @return list<string> */

@@ -182,3 +182,130 @@ document.querySelectorAll('[data-slug-source]').forEach((source) => {
         target.dataset.touched = '1';
     });
 });
+
+/* Image thumbnails that fall back when the host has no poster at that size - */
+document.querySelectorAll('img[data-fallback]').forEach((image) => {
+    image.addEventListener(
+        'error',
+        () => {
+            image.src = image.dataset.fallback;
+        },
+        { once: true },
+    );
+});
+
+/* Click-to-play video: the embed is only requested once someone asks for it */
+document.querySelectorAll('[data-video-play]').forEach((button) => {
+    button.addEventListener('click', () => {
+        const frame = document.createElement('iframe');
+
+        frame.src = button.dataset.src;
+        frame.title = button.dataset.title || 'Video';
+        frame.className = 'absolute inset-0 h-full w-full border-0';
+        frame.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+        frame.allowFullscreen = true;
+
+        button.replaceWith(frame);
+    });
+});
+
+/* Site: media gallery — thumbnails swap what the stage shows -------------- */
+document.querySelectorAll('[data-gallery-view]').forEach((gallery) => {
+    const panels = [...gallery.querySelectorAll('[data-gallery-panel]')];
+    const thumbs = [...gallery.querySelectorAll('[data-gallery-thumb]')];
+
+    thumbs.forEach((thumb) => {
+        thumb.addEventListener('click', () => {
+            const index = thumb.dataset.galleryThumb;
+
+            panels.forEach((panel) => {
+                panel.style.display = panel.dataset.galleryPanel === index ? '' : 'none';
+            });
+
+            thumbs.forEach((other) => other.setAttribute('aria-current', String(other === thumb)));
+        });
+    });
+});
+
+/* Admin: gallery uploads — hold the limit and preview what is being added - */
+document.querySelectorAll('[data-gallery]').forEach((gallery) => {
+    const input = gallery.querySelector('[data-gallery-input]');
+    const previews = gallery.querySelector('[data-gallery-previews]');
+    const counter = gallery.querySelector('[data-gallery-count]');
+    const error = gallery.querySelector('[data-gallery-error]');
+    const limit = Number(gallery.dataset.limit) || 1;
+    const removals = [...gallery.querySelectorAll('[data-gallery-remove]')];
+    const saved = gallery.querySelectorAll('[data-gallery-item]').length;
+
+    if (!input) return;
+
+    // Images already on the record that are not being removed this time round.
+    const kept = () => saved - removals.filter((box) => box.checked).length;
+
+    const preview = (file, index) => {
+        const url = URL.createObjectURL(file);
+        const item = document.createElement('li');
+        item.className = 'rounded-xl border border-dashed border-violet/50 bg-lilac-soft p-2';
+
+        const image = document.createElement('img');
+        image.src = url;
+        image.alt = '';
+        image.className = 'h-24 w-full rounded-lg object-cover';
+        image.addEventListener('load', () => URL.revokeObjectURL(url), { once: true });
+
+        const label = document.createElement('label');
+        label.className = 'mt-2.5 flex cursor-pointer items-center gap-2 text-xs font-medium text-ink';
+
+        const radio = document.createElement('input');
+        radio.type = 'radio';
+        radio.name = 'featured_media';
+        radio.value = `upload:${index}`;
+        radio.className = 'accent-[#9900CC]';
+
+        // No saved image left to carry the flag, so the first new one takes it.
+        if (kept() === 0 && index === 0) radio.checked = true;
+
+        label.append(radio, document.createTextNode('Featured'));
+
+        const name = document.createElement('p');
+        name.className = 'mt-1 truncate text-xs text-muted';
+        name.textContent = file.name;
+
+        item.append(image, label, name);
+
+        return item;
+    };
+
+    const render = () => {
+        const files = [...(input.files || [])];
+
+        previews.replaceChildren(...files.map(preview));
+        previews.style.display = files.length ? 'grid' : 'none';
+        counter.textContent = `${kept() + files.length} of ${limit} used`;
+    };
+
+    input.addEventListener('change', () => {
+        const room = limit - kept();
+
+        if (input.files.length > room) {
+            error.textContent = room
+                ? `There is room for ${room} more image${room === 1 ? '' : 's'}. Remove one first, or pick fewer.`
+                : `All ${limit} slots are used. Tick "Remove" on one first.`;
+            error.classList.remove('hidden');
+            input.value = '';
+        } else {
+            error.classList.add('hidden');
+        }
+
+        render();
+    });
+
+    removals.forEach((box) => {
+        box.addEventListener('change', () => {
+            box.closest('[data-gallery-item]')?.classList.toggle('opacity-40', box.checked);
+            render();
+        });
+    });
+
+    render();
+});

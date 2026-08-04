@@ -2,17 +2,18 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Admin\Concerns\HandlesUploads;
+use App\Http\Controllers\Admin\Concerns\HandlesMediaUploads;
 use App\Http\Controllers\Controller;
 use App\Models\Post;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Validation\Rule;
 
 class PostController extends Controller
 {
-    use HandlesUploads;
+    use HandlesMediaUploads;
 
     public function index(): View
     {
@@ -31,9 +32,9 @@ class PostController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $data = $this->validated($request);
-        $data = $this->withUpload($data, 'cover', $this->handleUpload($request, 'cover', 'posts'));
 
-        Post::create($data);
+        $post = Post::create($data);
+        $this->syncMedia($request, $post, 'posts');
 
         return redirect()->route('admin.posts.index')->with('status', 'Post created.');
     }
@@ -46,16 +47,15 @@ class PostController extends Controller
     public function update(Request $request, Post $post): RedirectResponse
     {
         $data = $this->validated($request, $post);
-        $data = $this->withUpload($data, 'cover', $this->handleUpload($request, 'cover', 'posts', $post->cover));
 
         $post->update($data);
+        $this->syncMedia($request, $post, 'posts');
 
         return redirect()->route('admin.posts.index')->with('status', 'Post updated.');
     }
 
     public function destroy(Post $post): RedirectResponse
     {
-        $this->deleteUpload($post->cover);
         $post->delete();
 
         return redirect()->route('admin.posts.index')->with('status', 'Post deleted.');
@@ -71,10 +71,10 @@ class PostController extends Controller
             'excerpt' => ['nullable', 'string', 'max:500'],
             'body' => ['nullable', 'string'],
             'published_at' => ['nullable', 'date'],
-            'cover' => ['nullable', 'image', 'max:5120'],
+            ...$this->mediaRules($request, $post, Post::MEDIA_LIMIT),
         ]);
 
-        unset($data['cover']);
+        $data = Arr::except($data, $this->mediaInputKeys());
 
         $data['is_published'] = $request->boolean('is_published');
         $data['published_at'] = $data['published_at'] ?? null;

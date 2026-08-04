@@ -22,9 +22,35 @@
                 </div>
             </x-admin.panel>
 
-            <x-admin.panel title="Cover image">
-                <x-admin.image-field label="Image" name="image" :current="$project->image"
-                    help="Landscape works best (roughly 3:2). Max 5 MB." />
+            <x-admin.panel title="Images">
+                <x-admin.gallery-field :media="$project->media" :limit="App\Models\Project::MEDIA_LIMIT"
+                    help="Up to {{ App\Models\Project::MEDIA_LIMIT }} images, landscape works best (roughly 3:2), max 5 MB each. Tick one as the featured image — it becomes the cover used on the work grid and the home page." />
+            </x-admin.panel>
+
+            <x-admin.panel title="Video &amp; link"
+                description="Optional. A video takes over the top of the project page; the images then follow as a gallery.">
+                <div class="space-y-5">
+                    <x-admin.field label="Website URL" name="website_url" :value="$project->website_url"
+                        placeholder="https://example.com" help="Adds a 'Visit …' button to the project page." />
+
+                    <x-admin.field label="Video URL" name="video_url" :value="$project->video_url"
+                        placeholder="https://www.youtube.com/watch?v=…" help="A YouTube or Vimeo link." />
+
+                    @if ($project->hasVideo())
+                        <div>
+                            <span class="block text-[0.72rem] font-semibold tracking-[0.13em] text-deep uppercase">
+                                Preview
+                            </span>
+                            <div class="mt-2 aspect-video w-full max-w-sm overflow-hidden rounded-xl">
+                                <x-video-preview :url="$project->video_url" :title="$project->title" />
+                            </div>
+                            <p class="mt-2 text-xs text-muted">
+                                This plays first on the project page. Clear the field to lead with the featured image
+                                instead.
+                            </p>
+                        </div>
+                    @endif
+                </div>
             </x-admin.panel>
         </div>
 

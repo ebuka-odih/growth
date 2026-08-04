@@ -22,8 +22,9 @@
                 </div>
             </x-admin.panel>
 
-            <x-admin.panel title="Cover image">
-                <x-admin.image-field label="Image" name="image" :current="$course->image" help="Optional. Max 5 MB." />
+            <x-admin.panel title="Images">
+                <x-admin.gallery-field :media="$course->media" :limit="App\Models\Course::MEDIA_LIMIT"
+                    help="Optional. Up to {{ App\Models\Course::MEDIA_LIMIT }} images, max 5 MB each. Tick one as the featured image — it becomes the cover shown on the course cards." />
             </x-admin.panel>
         </div>
 
