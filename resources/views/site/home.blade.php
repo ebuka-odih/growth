@@ -136,12 +136,16 @@
                 @foreach ($projects as $project)
                     <a href="{{ route('work.show', $project) }}"
                         class="reveal group overflow-hidden rounded-[var(--radius-brand)] border border-white/10 bg-deep-700 transition duration-300 hover:-translate-y-1.5">
-                        @if ($project->imageUrl())
-                            <img src="{{ $project->imageUrl() }}" alt="{{ $project->title }}"
-                                class="h-56 w-full object-cover" loading="lazy">
-                        @else
-                            <x-placeholder tone="dark" label="Project image" class="min-h-56 border-0" />
-                        @endif
+                        <div class="relative">
+                            @if ($project->imageUrl())
+                                <img src="{{ $project->imageUrl() }}" alt="{{ $project->title }}"
+                                    class="h-56 w-full object-cover" loading="lazy">
+                            @else
+                                <x-placeholder tone="dark" label="Project image" class="min-h-56 border-0" />
+                            @endif
+
+                            <x-media-badge :project="$project" />
+                        </div>
                         <div class="p-6">
                             <h3 class="text-[0.98rem] font-semibold text-white">{{ $project->title }}</h3>
                             <p class="mt-1.5 text-[0.82rem] text-lilac/60">{{ $project->disciplines }}</p>

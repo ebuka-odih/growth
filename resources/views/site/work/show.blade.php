@@ -5,13 +5,8 @@
 
     <section class="py-20 lg:py-24">
         <div class="mx-auto max-w-6xl px-6">
-            <div class="reveal overflow-hidden rounded-[var(--radius-brand)]">
-                @if ($project->imageUrl())
-                    <img src="{{ $project->imageUrl() }}" alt="{{ $project->title }}" class="w-full object-cover">
-                @else
-                    <x-placeholder label="Project image" class="min-h-[320px] lg:min-h-[420px]" />
-                @endif
-            </div>
+            <x-media-gallery class="reveal" :media="$project->orderedMedia()" :video-url="$project->video_url"
+                :title="$project->title" placeholder="Project image" />
 
             <div class="mt-14 grid gap-14 lg:grid-cols-[1.4fr_1fr]">
                 <div class="reveal prose-brand">
@@ -40,6 +35,17 @@
                             @endif
                         @endforeach
                     </dl>
+
+                    @if ($project->website_url)
+                        <x-button variant="ghost" :href="$project->website_url" target="_blank" rel="noopener noreferrer"
+                            class="mt-5 w-full">
+                            Visit {{ $project->websiteHost() }}
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                class="h-3.5 w-3.5 shrink-0" aria-hidden="true">
+                                <path d="M7 17 17 7M9 7h8v8" stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                        </x-button>
+                    @endif
 
                     <x-button variant="primary" :href="route('contact')" class="mt-5 w-full">Start a project like this</x-button>
                 </aside>

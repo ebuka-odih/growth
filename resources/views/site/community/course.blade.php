@@ -13,9 +13,8 @@
     <section class="py-20 lg:py-24">
         <div class="mx-auto grid max-w-6xl gap-14 px-6 lg:grid-cols-[1.4fr_1fr]">
             <div class="reveal">
-                @if ($course->imageUrl())
-                    <img src="{{ $course->imageUrl() }}" alt="{{ $course->title }}"
-                        class="mb-10 w-full rounded-[var(--radius-brand)] object-cover">
+                @if ($course->media->isNotEmpty())
+                    <x-media-gallery class="mb-10" :media="$course->orderedMedia()" :title="$course->title" />
                 @endif
 
                 <div class="prose-brand">

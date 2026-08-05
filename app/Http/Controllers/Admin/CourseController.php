@@ -2,17 +2,18 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Admin\Concerns\HandlesUploads;
+use App\Http\Controllers\Admin\Concerns\HandlesMediaUploads;
 use App\Http\Controllers\Controller;
 use App\Models\Course;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Validation\Rule;
 
 class CourseController extends Controller
 {
-    use HandlesUploads;
+    use HandlesMediaUploads;
 
     public function index(): View
     {
@@ -31,9 +32,9 @@ class CourseController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $data = $this->validated($request);
-        $data = $this->withUpload($data, 'image', $this->handleUpload($request, 'image', 'courses'));
 
-        Course::create($data);
+        $course = Course::create($data);
+        $this->syncMedia($request, $course, 'courses');
 
         return redirect()->route('admin.courses.index')->with('status', 'Course created.');
     }
@@ -46,16 +47,15 @@ class CourseController extends Controller
     public function update(Request $request, Course $course): RedirectResponse
     {
         $data = $this->validated($request, $course);
-        $data = $this->withUpload($data, 'image', $this->handleUpload($request, 'image', 'courses', $course->image));
 
         $course->update($data);
+        $this->syncMedia($request, $course, 'courses');
 
         return redirect()->route('admin.courses.index')->with('status', 'Course updated.');
     }
 
     public function destroy(Course $course): RedirectResponse
     {
-        $this->deleteUpload($course->image);
         $course->delete();
 
         return redirect()->route('admin.courses.index')->with('status', 'Course deleted.');
@@ -74,10 +74,10 @@ class CourseController extends Controller
             'price' => ['nullable', 'numeric', 'min:0'],
             'format' => ['nullable', 'string', 'max:80'],
             'position' => ['nullable', 'integer', 'min:0'],
-            'image' => ['nullable', 'image', 'max:5120'],
+            ...$this->mediaRules($request, $course, Course::MEDIA_LIMIT),
         ]);
 
-        unset($data['image']);
+        $data = Arr::except($data, $this->mediaInputKeys());
 
         $data['position'] = $data['position'] ?? 0;
         $data['is_published'] = $request->boolean('is_published');

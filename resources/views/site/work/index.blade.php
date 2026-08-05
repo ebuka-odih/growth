@@ -24,12 +24,16 @@
                 @forelse ($projects as $project)
                     <a href="{{ route('work.show', $project) }}"
                         class="reveal group overflow-hidden rounded-[var(--radius-brand)] border border-deep/10 bg-white transition duration-300 hover:-translate-y-1.5 hover:border-violet hover:shadow-[0_22px_44px_rgba(51,0,102,0.12)]">
-                        @if ($project->imageUrl())
-                            <img src="{{ $project->imageUrl() }}" alt="{{ $project->title }}"
-                                class="h-56 w-full object-cover" loading="lazy">
-                        @else
-                            <x-placeholder label="Project image" class="min-h-56 border-0" />
-                        @endif
+                        <div class="relative">
+                            @if ($project->imageUrl())
+                                <img src="{{ $project->imageUrl() }}" alt="{{ $project->title }}"
+                                    class="h-56 w-full object-cover" loading="lazy">
+                            @else
+                                <x-placeholder label="Project image" class="min-h-56 border-0" />
+                            @endif
+
+                            <x-media-badge :project="$project" />
+                        </div>
 
                         <div class="p-6">
                             @if ($project->category)

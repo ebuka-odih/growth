@@ -11,9 +11,8 @@
 
     <article class="py-20 lg:py-24">
         <div class="mx-auto max-w-6xl px-6">
-            @if ($post->coverUrl())
-                <img src="{{ $post->coverUrl() }}" alt="{{ $post->title }}"
-                    class="reveal mb-14 w-full rounded-[var(--radius-brand)] object-cover">
+            @if ($post->media->isNotEmpty())
+                <x-media-gallery class="reveal mb-14" :media="$post->orderedMedia()" :title="$post->title" />
             @endif
 
             <div class="grid gap-14 lg:grid-cols-[1.5fr_1fr]">

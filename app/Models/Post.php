@@ -2,17 +2,21 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\HasMedia;
 use App\Models\Concerns\HasSlug;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class Post extends Model
 {
-    use HasSlug;
+    use HasMedia, HasSlug;
+
+    public const MEDIA_LIMIT = 3;
 
     protected $guarded = [];
+
+    protected $with = ['media'];
 
     protected $casts = [
         'published_at' => 'datetime',
@@ -32,7 +36,7 @@ class Post extends Model
 
     public function coverUrl(): ?string
     {
-        return $this->cover ? Storage::url($this->cover) : null;
+        return $this->featuredImageUrl();
     }
 
     public function readingTime(): int

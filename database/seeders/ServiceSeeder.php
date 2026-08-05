@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Service;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Str;
 
 class ServiceSeeder extends Seeder
 {
@@ -70,7 +71,7 @@ class ServiceSeeder extends Seeder
 
         foreach ($services as $i => $service) {
             Service::firstOrCreate(
-                ['slug' => \Illuminate\Support\Str::slug($service['title'])],
+                ['slug' => Str::slug($service['title'])],
                 $service + ['position' => $i, 'is_published' => true],
             );
         }
