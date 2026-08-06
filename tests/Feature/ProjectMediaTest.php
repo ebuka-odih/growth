@@ -146,4 +146,25 @@ class ProjectMediaTest extends TestCase
             ->assertSee('data-gallery-thumb="2"', escape: false)
             ->assertSee('Visit growsphere.ng');
     }
+
+    public function test_the_admin_projects_index_links_to_the_edit_page(): void
+    {
+        $project = Project::create(['title' => 'Personal Brand Kit Creator']);
+
+        $response = $this->get(route('admin.projects.index'))->assertOk();
+        $response->assertSee(route('admin.projects.edit', $project), escape: false);
+
+        // Follow the edit link and ensure it renders the form.
+        $this->get(route('admin.projects.edit', $project))
+            ->assertOk()
+            ->assertSee('Save changes');
+    }
+
+    public function test_a_get_request_to_the_update_uri_redirects_to_edit(): void
+    {
+        $project = Project::create(['title' => 'Personal Brand Kit Creator']);
+
+        $this->get(route('admin.projects.update', $project))
+            ->assertRedirect(route('admin.projects.edit', $project));
+    }
 }

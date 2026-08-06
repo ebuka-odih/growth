@@ -20,6 +20,12 @@ use App\Http\Controllers\Site\PageController;
 use App\Http\Controllers\Site\ServiceController;
 use App\Http\Controllers\Site\SubscriberController;
 use App\Http\Controllers\Site\WorkController;
+use App\Models\Cohort;
+use App\Models\Course;
+use App\Models\Post;
+use App\Models\Project;
+use App\Models\Service;
+use App\Models\Testimonial;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -65,6 +71,16 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::resource('courses', AdminCourseController::class)->except('show');
         Route::resource('testimonials', AdminTestimonialController::class)->except('show');
         Route::resource('posts', AdminPostController::class)->except('show');
+
+        // Browsers that land on a resource URL via GET (e.g. after a back-button
+        // from an update) should be sent to the edit form instead of hitting a
+        // 405 "Method Not Allowed" response on the update/destroy route.
+        Route::get('services/{service}', fn (Service $service) => redirect()->route('admin.services.edit', $service));
+        Route::get('projects/{project}', fn (Project $project) => redirect()->route('admin.projects.edit', $project));
+        Route::get('cohorts/{cohort}', fn (Cohort $cohort) => redirect()->route('admin.cohorts.edit', $cohort));
+        Route::get('courses/{course}', fn (Course $course) => redirect()->route('admin.courses.edit', $course));
+        Route::get('testimonials/{testimonial}', fn (Testimonial $testimonial) => redirect()->route('admin.testimonials.edit', $testimonial));
+        Route::get('posts/{post}', fn (Post $post) => redirect()->route('admin.posts.edit', $post));
 
         Route::get('bookings', [AdminBookingController::class, 'index'])->name('bookings.index');
         Route::get('bookings/{booking}', [AdminBookingController::class, 'show'])->name('bookings.show');
